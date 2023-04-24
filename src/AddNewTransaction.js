@@ -1,59 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function AddNewTransaction({ data, setData }) {
-    const [date, setDate] = useState("");
-    const [description, setDescription] = useState("");
-    const [category, setCategory] = useState("");
-    const [amount, setAmount] = useState("");
+  const [date, setDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [amount, setAmount] = useState("");
 
-    function onSubmit(e) {
-      e.preventDefault();
-      const formData = {
-        date: date,
-        description: description,
-        category: category,
-        amount: amount,
-      };
-      setData([...data, formData]);
-    }
+  function onSubmit(e) {
+    e.preventDefault();
+    const formData = {
+      date: date,
+      description: description,
+      category: category,
+      amount: amount,
+    };
 
-    return (
-      <form className="form" onSubmit={onSubmit}>
-        <label>
-          DATE
-          <input
-            type="text"
-            placeholder="Date"
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </label>
-        <label>
-          DESCRIPTION
-          <input
-            type="text"
-            placeholder="Description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </label>
-        <label>
-          CATEGORY
-          <input
-            type="text"
-            placeholder="Category"
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </label>
-        <label>
-          AMOUNT
-          <input
-            type="text"
-            placeholder="Amount"
-            onChange={(e) => setAmount(e.target.value)}
-          />
-        </label>
-        <input type="submit" />
-      </form>
-    );
+    fetch("http://localhost:3000/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((r) => r.json())
+      .then((newdata) => setData([...data, newdata]));
   }
+
+  return (
+    <form className="form" onSubmit={onSubmit}>
+      <label>
+        DATE
+        <input
+          type="text"
+          placeholder="Date"
+          onChange={(e) => setDate(e.target.value)}
+        />
+      </label>
+      <label>
+        DESCRIPTION
+        <input
+          type="text"
+          placeholder="Description"
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </label>
+      <label>
+        CATEGORY
+        <input
+          type="text"
+          placeholder="Category"
+          onChange={(e) => setCategory(e.target.value)}
+        />
+      </label>
+      <label>
+        AMOUNT
+        <input
+          type="text"
+          placeholder="Amount"
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </label>
+      <input type="submit" />
+    </form>
+  );
+}
 
 export default AddNewTransaction;

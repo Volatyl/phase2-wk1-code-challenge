@@ -24,7 +24,7 @@ function App() {
   return (
     <div>
       <FilterData onSearch={handleSearch} />
-      <DisplayTrans data={filteredData} />
+      <DisplayTrans data={filteredData} updateData={setData}/>
       <AddNewTransaction data={data} setData={setData} />
     </div>
   );
