@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./app.css";
+import FilterData from "./FilterData";
+import DisplayTrans from "./DisplayTrans";
+import AddNewTransaction from "./AddNewTransaction";
 
 function App() {
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+
+  console.log(search);
+  function handleSearch(value) {
+    setSearch(value);
+  }
+
+  const filteredData = data.filter((item) => item.description.toLowerCase().includes(search.toLowerCase()));
 
   useEffect(() => {
     fetch("http://localhost:3000/transactions")
@@ -10,48 +21,11 @@ function App() {
       .then((data) => setData(data));
   }, []);
 
-  function DisplayTransactions({ data }) {
-    return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>DATE</th>
-            <th>DESCRIPTION</th>
-            <th>CATEGORY</th>
-            <th>AMOUNT</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => {
-            return (
-              <tr key={item.id}>
-                <td>{item.date}</td>
-                <td>{item.description}</td>
-                <td>{item.category}</td>
-                <td>{item.amount}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  }
-
-  function AddNewTransaction() {
-    return (
-      <form className="form">
-       <label>DATE<input type="text" value="date" /></label> 
-       <label>DESCRIPTION<input type="text" value="description"/></label> 
-       <label>CATEGORY<input type="text" value="category" /></label> 
-       <label>AMOUNT<input type="text" value="amount" /></label> 
-      </form>
-    );
-  }
-
   return (
     <div>
-      {/* <DisplayTransactions data={data} /> */}
-      <AddNewTransaction />
+      <FilterData onSearch={handleSearch} />
+      <DisplayTrans data={filteredData} />
+      <AddNewTransaction data={data} setData={setData} />
     </div>
   );
 }
