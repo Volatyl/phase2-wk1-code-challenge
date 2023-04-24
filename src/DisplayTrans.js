@@ -6,18 +6,23 @@ function DisplayTrans({ data, updateData }) {
       method: "DELETE",
     })
       .then((res) =>
-        res ? res.json : Promise.Reject("Failed to delete transaction")
+        res ? res.json : Promise.reject("Failed to delete transaction")
       )
       .then(() => updateData(data.filter((item) => item.id !== id)));
+  }
+
+  function handleSort(e) {
+    const btn = e.target.textContent.toLowerCase();
+    updateData([...data].sort((a, b) => a[btn].localeCompare(b[btn])));
   }
 
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>DATE</th>
-          <th>DESCRIPTION</th>
-          <th>CATEGORY</th>
+          <th onClick={handleSort}>DATE</th>
+          <th onClick={handleSort}>DESCRIPTION</th>
+          <th onClick={handleSort}>CATEGORY</th>
           <th>AMOUNT</th>
         </tr>
       </thead>
